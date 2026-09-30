@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>解説スライド｜けん と りか の 6周レース</title>
+<meta name="description" content="1周120mのコースを6周するけんとりかの問題の解説スライド。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Zen+Kaku+Gothic+New:wght@500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ken:#2563eb;
+  --ink:#0f1b2d; --ink2:#51627a; --ink3:#8c9ab0;
+  --line:#e2e8f0;
+  --navy:#0e1a2c;
+  --num:"Barlow Condensed","Segoe UI",sans-serif;
+  --jp:"Zen Kaku Gothic New","Meiryo","Yu Gothic UI","Hiragino Sans",sans-serif;
+}
+*{box-sizing:border-box;}
+body{
+  margin:0; padding:18px 22px 32px;
+  font-family:var(--jp); color:var(--ink);
+  background:linear-gradient(180deg,#e6ecf4 0%,#f3f5f9 360px) #f3f5f9;
+}
+header{display:flex; align-items:center; gap:12px; margin:0 0 14px; flex-wrap:wrap;}
+.logo{
+  width:36px; height:36px; border-radius:11px; background:var(--navy);
+  display:grid; place-items:center; box-shadow:0 4px 12px rgba(14,26,44,.25);
+}
+h1{margin:0; font-size:20px; font-weight:900; letter-spacing:.05em;}
+.tabs{
+  margin-left:auto; display:inline-flex; gap:2px; padding:4px; border-radius:12px; background:#fff;
+  box-shadow:0 1px 2px rgba(15,27,45,.06), 0 6px 16px rgba(15,27,45,.06);
+}
+.tabs a{padding:8px 14px; border-radius:9px; font-weight:700; font-size:13px; color:var(--ink2); text-decoration:none;}
+.tabs a:hover{color:var(--ink);}
+.tabs a.on{background:var(--navy); color:#fff;}
+
+.card{
+  background:#fff; border-radius:18px; padding:14px;
+  box-shadow:0 1px 2px rgba(15,27,45,.06), 0 14px 34px rgba(15,27,45,.08);
+  max-width:1180px; margin:0 auto;
+}
+
+/* ---------- スライド ---------- */
+.stage{
+  position:relative; aspect-ratio:16/9; border-radius:12px; overflow:hidden;
+  background:#e9edf3; user-select:none;
+}
+.stage img{position:absolute; inset:0; width:100%; height:100%; object-fit:contain; display:block;}
+.nav{
+  position:absolute; top:50%; transform:translateY(-50%);
+  width:52px; height:52px; border-radius:50%; border:none; cursor:pointer;
+  background:rgba(14,26,44,.72); color:#fff; display:grid; place-items:center;
+  box-shadow:0 6px 18px rgba(0,0,0,.2); transition:opacity .15s, background .15s;
+}
+.nav:hover{background:rgba(14,26,44,.9);}
+.nav:disabled{opacity:0; pointer-events:none;}
+#prev{left:14px;} #next{right:14px;}
+.stage .tool{
+  position:absolute; top:12px; right:12px; display:flex; gap:8px; align-items:center;
+}
+.count{
+  font-family:var(--num); font-weight:600; font-size:16px; color:#fff; letter-spacing:.04em;
+  background:rgba(14,26,44,.72); padding:5px 12px; border-radius:999px;
+}
+.count b{font-size:19px; font-weight:700;}
+#full{
+  width:36px; height:36px; border-radius:50%; border:none; cursor:pointer;
+  background:rgba(14,26,44,.72); color:#fff; display:grid; place-items:center;
+}
+#full:hover{background:rgba(14,26,44,.9);}
+
+/* 全画面のとき */
+.stage:fullscreen{border-radius:0; background:#111;}
+.stage:-webkit-full-screen{border-radius:0; background:#111;}
+
+/* ---------- 下のサムネイル ---------- */
+.bar{display:flex; align-items:center; gap:14px; margin-top:12px;}
+.prog{flex:1; height:6px; border-radius:4px; background:#e2e8f0; overflow:hidden;}
+.prog i{display:block; height:100%; width:0; background:var(--ken); border-radius:4px; transition:width .2s;}
+.hint{font-size:11px; color:var(--ink3); white-space:nowrap;}
+
+.thumbs{
+  display:flex; gap:10px; overflow-x:auto; padding:12px 2px 6px; margin-top:4px;
+  scroll-behavior:smooth;
+}
+.thumbs::-webkit-scrollbar{height:8px;}
+.thumbs::-webkit-scrollbar-thumb{background:#c7d0dc; border-radius:6px;}
+.th{
+  flex:0 0 auto; width:148px; aspect-ratio:16/9; border-radius:8px; overflow:hidden;
+  position:relative; cursor:pointer; border:2px solid transparent; padding:0; background:#e9edf3;
+  opacity:.72; transition:opacity .15s, transform .15s, border-color .15s;
+}
+.th:hover{opacity:1; transform:translateY(-2px);}
+.th.on{opacity:1; border-color:var(--ken); box-shadow:0 4px 12px rgba(37,99,235,.25);}
+.th img{width:100%; height:100%; object-fit:cover; display:block;}
+.th span{
+  position:absolute; left:6px; bottom:5px; font-family:var(--num); font-weight:700; font-size:13px;
+  color:#fff; background:rgba(14,26,44,.75); border-radius:6px; padding:0 6px;
+}
+
+@media (max-width:640px){
+  .nav{width:40px; height:40px;} #prev{left:8px;} #next{right:8px;}
+  .th{width:112px;}
+  .hint{display:none;}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <span class="logo">
+    <svg width="22" height="14" viewBox="0 0 22 14">
+      <rect x="1" y="1" width="20" height="12" rx="6" fill="none" stroke="#e0654a" stroke-width="2.4"/>
+      <rect x="6" y="4.6" width="10" height="4.8" rx="2.4" fill="#4cae5e"/>
+    </svg>
+  </span>
+  <h1>けん と りか の 6周レース</h1>
+  <nav class="tabs"><a href="index.html">シミュレーション</a><a href="slides.html" class="on">解説スライド</a></nav>
+</header>
+
+<section class="card">
+  <div class="stage" id="stage">
+    <img id="main" alt="">
+    <button class="nav" id="prev" aria-label="前のスライド">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>
+    </button>
+    <button class="nav" id="next" aria-label="次のスライド">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>
+    </button>
+    <div class="tool">
+      <span class="count"><b id="cur">1</b> / <span id="tot">1</span></span>
+      <button id="full" aria-label="全画面">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="bar">
+    <div class="prog"><i id="prog"></i></div>
+    <span class="hint">←→：前後のスライド　F：全画面</span>
+  </div>
+  <div class="thumbs" id="thumbs"></div>
+</section>
+
+<script>
+(function(){
+"use strict";
+var N=18, SL=[];
+for(var i=1;i<=N;i++) SL.push("slides/slide"+(i<10?"0":"")+i+".jpg");
+
+var $=function(id){ return document.getElementById(id); };
+var main=$("main"), idx=0;
+$("tot").textContent=N;
+
+/* サムネイル */
+var th=$("thumbs"), html="";
+SL.forEach(function(src,i){
+  html+='<button class="th" data-i="'+i+'" aria-label="スライド'+(i+1)+'"><img src="'+src+'" loading="lazy" alt=""><span>'+(i+1)+'</span></button>';
+});
+th.innerHTML=html;
+var tbs=th.querySelectorAll(".th");
+
+function show(i){
+  idx=Math.max(0,Math.min(N-1,i));
+  main.src=SL[idx];
+  main.alt="解説スライド "+(idx+1);
+  $("cur").textContent=idx+1;
+  $("prog").style.width=((idx+1)/N*100)+"%";
+  $("prev").disabled=(idx===0);
+  $("next").disabled=(idx===N-1);
+  for(var k=0;k<tbs.length;k++) tbs[k].classList.toggle("on",k===idx);
+  var t=tbs[idx], tr=t.getBoundingClientRect(), hr=th.getBoundingClientRect();
+  th.scrollLeft+=(tr.left-hr.left)-(th.clientWidth-t.clientWidth)/2;   /* 今のスライドを一覧のまん中へ */
+  if(location.hash!=="#"+(idx+1)) history.replaceState(null,"","#"+(idx+1));
+  [idx+1,idx-1].forEach(function(j){ if(j>=0&&j<N){ var im=new Image(); im.src=SL[j]; } });
+}
+
+$("prev").addEventListener("click",function(){ show(idx-1); });
+$("next").addEventListener("click",function(){ show(idx+1); });
+th.addEventListener("click",function(e){
+  var b=e.target.closest(".th"); if(b) show(parseInt(b.dataset.i,10));
+});
+
+/* 全画面 */
+function toggleFull(){
+  var st=$("stage");
+  if(document.fullscreenElement||document.webkitFullscreenElement){
+    (document.exitFullscreen||document.webkitExitFullscreen).call(document);
+  } else {
+    (st.requestFullscreen||st.webkitRequestFullscreen).call(st);
+  }
+}
+$("full").addEventListener("click",toggleFull);
+main.addEventListener("dblclick",toggleFull);
+
+/* キーボード */
+document.addEventListener("keydown",function(e){
+  if(e.key==="ArrowRight"||e.key==="PageDown"||e.key===" "){ e.preventDefault(); show(idx+1); }
+  else if(e.key==="ArrowLeft"||e.key==="PageUp"){ e.preventDefault(); show(idx-1); }
+  else if(e.key==="Home"){ show(0); }
+  else if(e.key==="End"){ show(N-1); }
+  else if(e.key==="f"||e.key==="F"){ toggleFull(); }
+});
+
+/* スマホ・タブレットのスワイプ */
+var sx=null;
+$("stage").addEventListener("touchstart",function(e){ sx=e.touches[0].clientX; },{passive:true});
+$("stage").addEventListener("touchend",function(e){
+  if(sx===null) return;
+  var dx=e.changedTouches[0].clientX-sx; sx=null;
+  if(Math.abs(dx)>40) show(idx+(dx<0?1:-1));
+});
+
+var h=parseInt((location.hash||"").slice(1),10);
+show(isNaN(h)?0:h-1);
+})();
+</script>
+</body>
+</html>

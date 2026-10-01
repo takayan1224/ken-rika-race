@@ -69,6 +69,26 @@ h1{margin:0; font-size:20px; font-weight:900; letter-spacing:.05em;}
 .banner .bm{font-weight:900; font-size:14.5px; letter-spacing:.02em;}
 .banner .bs{font-size:11.5px; color:var(--ink2); font-weight:500;}
 
+/* ---------- グラウンド下の操作（画面がせまいときだけ） ---------- */
+.mini{display:none; align-items:center; gap:14px; padding:2px 4px 0;}
+#play2{
+  flex:0 0 auto; width:46px; height:46px; border-radius:50%; border:none; cursor:pointer; color:#fff;
+  background:linear-gradient(180deg,#3d7bff,#1f54d6); display:grid; place-items:center;
+  box-shadow:0 5px 14px rgba(37,99,235,.35);
+}
+#play2:active{transform:scale(.96);}
+.mini .scrub{min-width:0; flex:1 1 auto;}
+#slider2{
+  -webkit-appearance:none; appearance:none; width:100%; height:8px; margin:0;
+  border-radius:6px; background:#e2e8f0; outline:none; cursor:pointer;
+}
+#slider2::-webkit-slider-thumb{
+  -webkit-appearance:none; width:24px; height:24px; border-radius:50%;
+  background:#fff; border:3px solid var(--ken); box-shadow:0 1px 5px rgba(15,27,45,.3);
+}
+#slider2::-moz-range-thumb{width:18px; height:18px; border-radius:50%; background:#fff; border:3px solid var(--ken);}
+@media (max-width:1100px){ .mini{display:flex;} }
+
 /* ---------- 得点板 ---------- */
 .board{
   background:linear-gradient(180deg,#13223a,#0c1727); color:#fff; border-radius:13px;
@@ -194,6 +214,27 @@ details[open] summary::before{transform:rotate(90deg);}
 .ans p{margin:0 0 12px;}
 .ans b{color:var(--ev);}
 .ans .q{color:var(--ink); font-weight:900;}
+
+/* ---------- スマホ：得点板 ---------- */
+@media (max-width:560px){
+  .board{grid-template-columns:1fr; gap:8px; padding:10px 12px;}
+  .brow{grid-template-columns:46px 52px repeat(3,minmax(0,1fr)); gap:4px;}
+  .bname{font-size:13px; gap:6px;}
+  .bcell b{font-size:16px;} .blap b{font-size:21px;}
+  .bgap{border-left:none; border-top:1px solid rgba(255,255,255,.12); padding:8px 2px 0;
+        display:flex; align-items:baseline; justify-content:space-between;}
+  .bgap em{display:inline; flex:1; text-align:left;}
+  .bgap b{font-size:24px;}
+}
+
+/* ---------- スマホ：見出しと切り替えボタン ---------- */
+@media (max-width:560px){
+  body{padding:12px 12px 24px;}
+  header{flex-wrap:wrap; gap:10px;}
+  h1{font-size:16px;}
+  .tabs{margin-left:0; width:100%;}
+  .tabs a{flex:1; text-align:center; padding:9px 6px;}
+}
 </style>
 </head>
 <body>
@@ -277,6 +318,20 @@ details[open] summary::before{transform:rotate(90deg);}
       <div class="banner" id="banner">
         <span class="bk" id="bk">イ</span>
         <span><span class="bm" id="bm"></span> <span class="bs" id="bs"></span></span>
+      </div>
+    </div>
+
+    <div class="mini">
+      <button id="play2" aria-label="再生">
+        <svg id="icoPlay2" width="20" height="20" viewBox="0 0 24 24"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor"/></svg>
+        <svg id="icoPause2" width="20" height="20" viewBox="0 0 24 24" style="display:none">
+          <rect x="6.5" y="5.5" width="4" height="13" rx="1.2" fill="currentColor"/>
+          <rect x="13.5" y="5.5" width="4" height="13" rx="1.2" fill="currentColor"/>
+        </svg>
+      </button>
+      <div class="scrub">
+        <div class="marks" id="tmarks2"></div>
+        <input type="range" id="slider2" min="0" max="294" step="0.1" value="0" aria-label="時間">
       </div>
     </div>
 
@@ -874,18 +929,21 @@ g1.addEventListener("mouseleave",function(){
 });
 
 /* ================= 時刻と再生 ================= */
-var slider=$("slider"); slider.max=TMAX;
+var slider=$("slider"), slider2=$("slider2"); slider.max=TMAX; slider2.max=TMAX;
 var time=0, playing=false, last=0, timer=null, rate=1;
 
 function setTime(t){
   time=Math.max(0,Math.min(TMAX,t));
-  slider.value=time;
   var pct=(time/TMAX*100).toFixed(2);
-  slider.style.background="linear-gradient(90deg,#2563eb "+pct+"%,#e2e8f0 "+pct+"%)";
+  [slider,slider2].forEach(function(el){
+    el.value=time;
+    el.style.background="linear-gradient(90deg,#2563eb "+pct+"%,#e2e8f0 "+pct+"%)";
+  });
   drawStage(time); updateBoard(time); drawGraph(time); follow();
 }
 function showPlaying(on){
   $("icoPlay").style.display=on?"none":""; $("icoPause").style.display=on?"":"none";
+  $("icoPlay2").style.display=on?"none":""; $("icoPause2").style.display=on?"":"none";
 }
 function pause(){ playing=false; if(timer){clearInterval(timer);timer=null;} showPlaying(false); }
 function play(){
@@ -907,8 +965,10 @@ function step(){
 
 /* ================= 操作 ================= */
 $("play").addEventListener("click",function(){ playing?pause():play(); });
+$("play2").addEventListener("click",function(){ playing?pause():play(); });
 $("reset").addEventListener("click",function(){ pause(); setTime(0); });
 slider.addEventListener("input",function(){ pause(); setTime(parseFloat(slider.value)); });
+slider2.addEventListener("input",function(){ pause(); setTime(parseFloat(slider2.value)); });
 
 (function(){
   var h='<button class="scene" data-t="0"><i>▶</i>スタート</button>', mk2="";
@@ -917,7 +977,7 @@ slider.addEventListener("input",function(){ pause(); setTime(parseFloat(slider.v
     if(ev.key) mk2+='<i style="left:calc(10px + (100% - 20px)*'+(ev.t/TMAX)+')">'+ev.key+'</i>';
   });
   h+='<span class="hint">スペース：再生／停止　←→：0.5秒　↑↓：速度</span>';
-  $("scenes").innerHTML=h; $("tmarks").innerHTML=mk2;
+  $("scenes").innerHTML=h; $("tmarks").innerHTML=mk2; $("tmarks2").innerHTML=mk2;
   $("scenes").addEventListener("click",function(e){
     var b=e.target.closest(".scene"); if(!b) return;
     pause(); setTime(parseFloat(b.dataset.t));
